@@ -33,7 +33,7 @@ function App() {
   };
   return (
     <div style={{ padding: 20, fontFamily: "system-ui" }}>
-      <h2>�� Simple React Quiz</h2>
+      <h2>Simple React Quiz</h2>
       {showScore ? (
         <div>
           <h3>
