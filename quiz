@@ -1,65 +1,42 @@
-import React, { useState } from "react";
-function App() {
-  const questions = [
-    {
-      question: "What is the capital of France?",
-      options: ["Paris", "London", "Rome", "Berlin"],
-      answer: "Paris",
-    },
-    {
-      question: "Which planet is known as the Red Planet?",
-      options: ["Earth", "Mars", "Jupiter", "Venus"],
-      answer: "Mars",
-    },
-    {
-      question: "Which language is used for web apps?",
-      options: ["Python", "JavaScript", "C++", "Java"],
-      answer: "JavaScript",
-    },
-  ];
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [score, setScore] = useState(0);
-  const [showScore, setShowScore] = useState(false);
-  const handleAnswer = (option) => {
-    if (option === questions[currentQuestion].answer) {
-      setScore(score + 1);
-    }
-    const nextQuestion = currentQuestion + 1;
-    if (nextQuestion < questions.length) {
-      setCurrentQuestion(nextQuestion);
-    } else {
-      setShowScore(true);
-    }
-  };
-  return (
-    <div style={{ padding: 20, fontFamily: "system-ui" }}>
-      <h2>Simple React Quiz</h2>
-      {showScore ? (
-        <div>
-          <h3>
-            Your Score: {score} / {questions.length}
-          </h3>
-        </div>
-      ) : (
-        <div>
-          <h3>
-            Question {currentQuestion + 1} of {questions.length}
-          </h3>
-          <p>{questions[currentQuestion].question}</p>
-          <div>
-            {questions[currentQuestion].options.map((option, index) => (
-              <button
-                key={index}
-                onClick={() => handleAnswer(option)}
-                style={{ margin: 5 }}
-              >
-                {option}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-export default App;
+import sys
+def dijkstra(graph, src, dest, names):
+    n = len(graph)
+    visited = [False] * n
+    dist = [sys.maxsize] * n
+    dist[src] = 0
+    parent = [-1] * n
+    for _ in range(n):
+        min_dist = sys.maxsize
+        u = -1
+        for i in range(n):
+            if not visited[i] and dist[i] < min_dist:
+                min_dist = dist[i]
+                u = i
+        if u == -1:
+            break
+        visited[u] = True
+        for v in range(n):
+            if graph[u][v] > 0 and not visited[v]:
+                if dist[u] + graph[u][v] < dist[v]:
+                    dist[v] = dist[u] + graph[u][v]
+                    parent[v] = u
+    path = []
+    node = dest
+    while node != -1:
+        path.append(names[node])
+        node = parent[node]
+    path = path[::-1]
+    print("Shortest path from {} to {}: {}".format(names[src], names[dest], " -> ".join(path)))
+    print("Total cost:", dist[dest])
+names = ['a', 'b', 'c', 'd', 'e', 'z']
+graph = [
+    [0, 4, 2, 0, 0, 0],
+    [4, 0, 1, 5, 0, 0],
+    [2, 1, 0, 8, 10, 0],
+    [0, 5, 8, 0, 2, 6],
+    [0, 0, 10, 2, 0, 5],
+    [0, 0, 0, 6, 5, 0]
+]
+src = 0
+dest = 5
+dijkstra(graph, src, dest, names)
