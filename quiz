@@ -1,42 +1,70 @@
-import sys
-def dijkstra(graph, src, dest, names):
-    n = len(graph)
-    visited = [False] * n
-    dist = [sys.maxsize] * n
-    dist[src] = 0
-    parent = [-1] * n
-    for _ in range(n):
-        min_dist = sys.maxsize
-        u = -1
-        for i in range(n):
-            if not visited[i] and dist[i] < min_dist:
-                min_dist = dist[i]
-                u = i
-        if u == -1:
-            break
-        visited[u] = True
-        for v in range(n):
-            if graph[u][v] > 0 and not visited[v]:
-                if dist[u] + graph[u][v] < dist[v]:
-                    dist[v] = dist[u] + graph[u][v]
-                    parent[v] = u
-    path = []
-    node = dest
-    while node != -1:
-        path.append(names[node])
-        node = parent[node]
-    path = path[::-1]
-    print("Shortest path from {} to {}: {}".format(names[src], names[dest], " -> ".join(path)))
-    print("Total cost:", dist[dest])
-names = ['a', 'b', 'c', 'd', 'e', 'z']
-graph = [
-    [0, 4, 2, 0, 0, 0],
-    [4, 0, 1, 5, 0, 0],
-    [2, 1, 0, 8, 10, 0],
-    [0, 5, 8, 0, 2, 6],
-    [0, 0, 10, 2, 0, 5],
-    [0, 0, 0, 6, 5, 0]
-]
-src = 0
-dest = 5
-dijkstra(graph, src, dest, names)
+import 'package:flutter/material.dart';
+
+void main() => runApp(MaterialApp(home: SimpleForm()));
+
+class SimpleForm extends StatefulWidget {
+  @override
+  _SimpleFormState createState() => _SimpleFormState();
+}
+class _SimpleFormState extends State<SimpleForm> {
+  final _formKey = GlobalKey<FormState>();
+  final _name = TextEditingController();
+  final _email = TextEditingController();
+  final _password = TextEditingController();
+
+  String? _validateName(String? v) =>
+      (v == null || v.isEmpty) ? 'Please enter your name' : null;
+
+  String? _validateEmail(String? v) {
+    if (v == null || v.isEmpty) return 'Please enter your email';
+    final pattern = r'^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$';
+    if (!RegExp(pattern).hasMatch(v)) return 'Please enter a valid email address';
+    return null;
+  }
+
+  String? _validatePassword(String? v) {
+    if (v == null || v.isEmpty) return 'Please enter your password';
+    if (v.length < 6) return 'Password must be at least 6 characters long';
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: AppBar(title: const Text('Simple Form')),
+        body: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Form(
+            key: _formKey,
+            child: Column(children: [
+              TextFormField(
+                controller: _name,
+                decoration: const InputDecoration(labelText: 'Name'),
+                validator: _validateName,
+              ),
+              TextFormField(
+                controller: _email,
+                decoration: const InputDecoration(labelText: 'Email'),
+                keyboardType: TextInputType.emailAddress,
+                validator: _validateEmail,
+              ),
+              TextFormField(
+                controller: _password,
+                decoration: const InputDecoration(labelText: 'Password'),
+                obscureText: true,
+                validator: _validatePassword,
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Form submitted successfully')));
+                  }
+                },
+                child: const Text('Submit'),
+              ),
+            ]),
+          ),
+        ),
+      );
+}
