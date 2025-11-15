@@ -1,0 +1,25 @@
+import React, { useState } from "react";
+function Welcome({ name }) {
+  const [count, setCount] = useState(0);
+  return (
+    <div>
+      <h3>Hello, {name} 👋</h3>
+      <p>You have greeted {count} times.</p>
+      <button onClick={() => setCount(count + 1)}>Say Hello</button>
+    </div>
+  );
+}
+export default Welcome;
+----------------- 
+import React, { useState } from "react";
+function Welcome({ name }) {
+  const [count, setCount] = useState(0);
+  return (
+    <div>
+      <h3>Hello, {name} 👋</h3>
+      <p>You have greeted {count} times.</p>
+      <button onClick={() => setCount(count + 1)}>Say Hello</button>
+    </div>
+  );
+}
+export default Welcome;
